@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<monitors xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="./lib/config.xsd">
+
+    <urltest url="http://www.google.com/" name="Check that google is up!" />
+</monitors>

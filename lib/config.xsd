@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="xs3p.xsl"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<xsd:annotation>
+    <xsd:documentation xml:lang="en">
+PyUnit-Based Network Monitor
+
+Copyright © 2012 Pangaea Information Technologies, Ltd.
+                 http://www.pangaeatech.com/
+
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+  * Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+  * Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in the
+    documentation and/or other materials provided with the distribution.
+  * Neither the name of Pangaea Information Technologies, nor the names of
+    any contributors may be used to endorse or promote products derived
+    from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF 
+THE POSSIBILITY OF SUCH DAMAGE.
+    </xsd:documentation>
+</xsd:annotation>
+
+<!-- Element Types -->
+
+<xsd:element name="monitors">
+    <xsd:annotation>
+        <xsd:documentation xml:lang="en">The root node in the file.
+
+This node contains all of the tests that will be run.  The tests will be run in
+the order that they are specified, but can be listed in any order you choose,
+so feel free to group them into logical groups.
+        </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+        <xsd:choice minOccurs="1" maxOccurs="unbounded">
+            <xsd:element ref="urltest" />
+            <xsd:element ref="tcptest" />
+            <xsd:element ref="udptest" />
+            <xsd:element ref="filetest" />
+            <xsd:element ref="nofiletest" />
+            <xsd:element ref="dirtest" />
+            <xsd:element ref="disktest" />
+        </xsd:choice>
+    </xsd:complexType>
+</xsd:element>
+
+<xsd:element name="urltest">
+    <xsd:annotation>
+        <xsd:documentation xml:lang="en">Test a URL.
+
+Verify that the specified URL is valid and accessible.  Optionally, check the
+contents of the returned data against a regular expression.
+        </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+        <xsd:attribute name="url" type="xsd:anyURI" use="required">
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en">
+The URL to test.  Any URL type supported by urllib2 is valid (e.g. http, https,
+ftp).
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="regex" type="xsd:string" use="optional">
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en">
+If specified, then this regex must match <i>anywhere</i> within the data returned
+from the URL in order for the URL to be considered valid.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="username" type="xsd:string" use="optional">
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en">
+If specified, then use this username for basic HTTP authentication
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="password" type="xsd:string" use="optional">
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en">
+If specified, then use this password for basic HTTP authentication
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="name" type="xsd:string" use="optional">
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en">
+An optional name for the test
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+    </xsd:complexType>
+</xsd:element>
+
+<xsd:element name="tcptest">
+    <xsd:annotation>
+        <xsd:documentation xml:lang="en">Test a TCP Port.
+
+Verify that the specified TCP port is open on the specified host.
+        </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+        <xsd:attribute name="host" type="xsd:string" use="required">
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en">
+The host (IP address or FQDN) to test.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="port" type="xsd:positiveInteger" use="required">
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en">
+The port to test.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="name" type="xsd:string" use="optional">
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en">
+An optional name for the test
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+    </xsd:complexType>
+</xsd:element>
+
+<xsd:element name="udptest">
+    <xsd:annotation>
+        <xsd:documentation xml:lang="en">Test a UDP Port.
+
+Verify that the specified UDP port is open on the specified host.
+        </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+        <xsd:attribute name="host" type="xsd:string" use="required">
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en">
+The host (IP address or FQDN) to test.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="port" type="xsd:positiveInteger" use="required">
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en">
+The port to test.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="name" type="xsd:string" use="optional">
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en">
+An optional name for the test
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+    </xsd:complexType>
+</xsd:element>
+
+<xsd:element name="filetest">
+    <xsd:annotation>
+        <xsd:documentation xml:lang="en">Test that a File <i>exists</i> in the filesystem.
+
+Verify that the specified file is valid and readable.  Optionally, check the
+contents of the file against a regular expression.
+        </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+        <xsd:attribute name="file" type="xsd:string" use="required">
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en">
+The full path of the file (OS-dependent format).
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="regex" type="xsd:string" use="optional">
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en">
+If specified, then this regex must match <i>anywhere</i> within the file in
+order for the file to be considered valid.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="minSize" type="xsd:nonNegativeInteger" default="0">
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en">
+If specified, then the file must be at <i>least</i> this many bytes in size 
+to be considered valid.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="maxSize" type="xsd:nonNegativeInteger" use="optional">
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en">
+If specified, then the file must be at <i>most</i> this many bytes in size to
+be considered valid.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="name" type="xsd:string" use="optional">
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en">
+An optional name for the test
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+    </xsd:complexType>
+</xsd:element>
+
+<xsd:element name="nofiletest">
+    <xsd:annotation>
+        <xsd:documentation xml:lang="en">Test that a File does <i>not</i> exist in the filesystem.
+
+Verify that the specified file does not exist.
+        </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+        <xsd:attribute name="file" type="xsd:string" use="required">
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en">
+The full path of the file (OS-dependent format).
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="name" type="xsd:string" use="optional">
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en">
+An optional name for the test
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+    </xsd:complexType>
+</xsd:element>
+ 
+<xsd:element name="dirtest">
+    <xsd:annotation>
+        <xsd:documentation xml:lang="en">Test that a Directory <i>exists</i> in the filesystem.
+
+Verify that the specified directory is valid and readable.
+        </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+        <xsd:attribute name="dir" type="xsd:string" use="required">
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en">
+The full path of the directory (OS-dependent format).
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="minFiles" type="xsd:nonNegativeInteger" default="0">
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en">
+If specified, then the directory must contain at <i>least</i> this many files 
+to be considered valid.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="maxFiles" type="xsd:nonNegativeInteger" use="optional">
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en">
+If specified, then the directory must contain at <i>most</i> this many files to
+be considered valid.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="name" type="xsd:string" use="optional">
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en">
+An optional name for the test
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+    </xsd:complexType>
+</xsd:element>
+
+<xsd:element name="disktest">
+    <xsd:annotation>
+        <xsd:documentation xml:lang="en">Test the available free space on a disk/partition.
+        </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+        <xsd:attribute name="disk" type="xsd:string" use="required">
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en">
+The disk/partition to check (OS-dependent format).  Under Windows, this should be
+a drive letter (e.g. 'X:').  Under Unix, this should be a partition mount point
+(e.g. '/home').
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="minBytes" type="xsd:nonNegativeInteger" default="0">
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en">
+If specified, then the disk must contain at <i>least</i> this many bytes
+available to be considered valid.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="maxBytes" type="xsd:nonNegativeInteger" use="optional">
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en">
+If specified, then the disk must contain at <i>most</i> this many bytes
+available to be considered valid.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="name" type="xsd:string" use="optional">
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en">
+An optional name for the test
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+    </xsd:complexType>
+</xsd:element>
+
+</xsd:schema>
