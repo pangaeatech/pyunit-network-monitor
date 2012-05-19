@@ -53,7 +53,6 @@ so feel free to group them into logical groups.
             <xsd:element ref="udptest" />
             <xsd:element ref="filetest" />
             <xsd:element ref="nofiletest" />
-            <xsd:element ref="dirtest" />
             <xsd:element ref="disktest" />
         </xsd:choice>
     </xsd:complexType>
@@ -247,47 +246,6 @@ An optional name for the test
     </xsd:complexType>
 </xsd:element>
  
-<xsd:element name="dirtest">
-    <xsd:annotation>
-        <xsd:documentation xml:lang="en">Test that a Directory <i>exists</i> in the filesystem.
-
-Verify that the specified directory is valid and readable.
-        </xsd:documentation>
-    </xsd:annotation>
-    <xsd:complexType>
-        <xsd:attribute name="dir" type="xsd:string" use="required">
-            <xsd:annotation>
-                <xsd:documentation xml:lang="en">
-The full path of the directory (OS-dependent format).
-                </xsd:documentation>
-            </xsd:annotation>
-        </xsd:attribute>
-        <xsd:attribute name="minFiles" type="xsd:nonNegativeInteger" default="0">
-            <xsd:annotation>
-                <xsd:documentation xml:lang="en">
-If specified, then the directory must contain at <i>least</i> this many files 
-to be considered valid.
-                </xsd:documentation>
-            </xsd:annotation>
-        </xsd:attribute>
-        <xsd:attribute name="maxFiles" type="xsd:nonNegativeInteger" use="optional">
-            <xsd:annotation>
-                <xsd:documentation xml:lang="en">
-If specified, then the directory must contain at <i>most</i> this many files to
-be considered valid.
-                </xsd:documentation>
-            </xsd:annotation>
-        </xsd:attribute>
-        <xsd:attribute name="name" type="xsd:string" use="optional">
-            <xsd:annotation>
-                <xsd:documentation xml:lang="en">
-An optional name for the test
-                </xsd:documentation>
-            </xsd:annotation>
-        </xsd:attribute>
-    </xsd:complexType>
-</xsd:element>
-
 <xsd:element name="disktest">
     <xsd:annotation>
         <xsd:documentation xml:lang="en">Test the available free space on a disk/partition.
