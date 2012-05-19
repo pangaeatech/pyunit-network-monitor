@@ -33,7 +33,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
 THE POSSIBILITY OF SUCH DAMAGE.
 """
 
-import re, sys, argparse, socket
+import re, sys, argparse, socket, urllib2
 from xml.etree import ElementTree
 from lib import unittest, xmlrunner
 
@@ -129,13 +129,13 @@ def create_test(monitor):
             try:
                 open(monitor.get('file'), 'rb')
                 self.fail("IOError Expected")
-            raise IOError:
+            except IOError:
                 pass
         elif monitor.tag == 'disktest':
             if sys.platform.startswith("win"):
                 import win32api
                 freebytes = win32api.GetDiskFreeSpaceEx(monitor.get('disk'))[0]
-            else
+            else:
                 statvfs = os.statvfs(monitor.get('disk'))
                 freebytes = statvfs.f_bsize * statvfs.f_bavail
             minSize = monitor.get('minBytes', '0')
