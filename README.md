@@ -1,5 +1,5 @@
 PyUnit-Based Network Monitor
 ----------------------------
 
-See the [documentation](raw/master/lib/config.xsd) or browse the
+See the [documentation](blob/master/lib/config.html) or browse the
 [source](blob/master/main.py)
