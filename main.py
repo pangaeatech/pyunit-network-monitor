@@ -79,6 +79,17 @@ def _assertSize(self, size, minSize, maxSize, units='bytes'):
         self.failIf(maxSize < size, "More than %d %s!" % (maxSize, units))
 
 def _assertContent(self, data, substring=None, regex=None):
+    """
+    Assert that the specified data contains a substring and/or regex
+
+    @type data: string
+    @param data: the data to check
+    @type substring: string
+    @param substring: the substring to look for (or None)
+    @type regex: string
+    @param regex: the regular expression to look for (or None)
+    @return: None
+    """
     if substring is not None and len(substring) > 0:
         self.failUnless(substring in data, "Substring not found: %s" % substring)
     if regex is not None and len(regex) > 0:
