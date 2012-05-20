@@ -35,7 +35,11 @@ Currently, this tool supports the following types of monitors:
   expression.  Additionally, you can assert a minimum and maximum byte size 
   on the file and/or a minimum and maximum modification time for the file.
 * **nofiletest:** Test for the *non*-existence of a file in the filesystem.
-* **disktest:** Test the amount of free space on a disk/partition.
+* **disktest:** Test the amount of free space on a disk/partition.  Under
+  Windows, network disks are supported using 
+  [UNC notation](http://en.wikipedia.org/wiki/Path_%28computing%29) (Note: you
+  must have the [win32api](http://sourceforge.net/projects/pywin32/files/)
+  extension installed to support this).
 
 For more details on configuration, see the 
 [config.xml schema](/blob/master/lib/config.xsd).  For details about how to
