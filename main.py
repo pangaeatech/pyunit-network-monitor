@@ -157,7 +157,8 @@ def main(options):
     suite = unittest.TestSuite()
     suite.addTest(unittest.TestLoader().loadTestsFromTestCase(testclass))
     if options.outdir is not None:
-        os.makedirs(options.outdir)
+        if not os.path.isdir(options.outdir):
+            os.makedirs(options.outdir)
         runner = xmlrunner.XMLTestRunner()
         runner._path = options.outdir
     else:
