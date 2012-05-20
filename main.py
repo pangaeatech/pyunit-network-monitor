@@ -93,18 +93,22 @@ def create_test(monitor):
         if monitor is None:
             self.fail("No valid monitor found")
         elif monitor.tag == 'tcptest':
+            print "Checking TCP Connection to %s:%s" % (monitor.get('host'), monitor.get('port'))
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             s.connect(monitor.get('host'), monitor.get('port'))
             s.shutdown(2)
         elif monitor.tag == 'udptest':
+            print "Checking UCP Connection to %s:%s" % (monitor.get('host'), monitor.get('port'))
             s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
             s.connect(monitor.get('host'), monitor.get('port'))
             s.shutdown(2)
         elif monitor.tag == 'urltest':
+            print "Checking URL: %s" % (monitor.get('url'))
             request = urllib2.Request(monitor.get('url'))
             username = monitor.get('username', '')
             password = monitor.get('password', '')
             if len(username) > 0 and len(password) > 0:
+                print "Using HTTP Basic Authentication"
                 auth = base64.encodestring(
                         '%s:%s' % (username, password)).replace('\n', '')
                 request.add_header("Authorization", "Basic %s" % auth)
@@ -114,10 +118,11 @@ def create_test(monitor):
             if len(regex) > 0 or len(contains) > 0:
                 data = req.read()
                 if len(regex) > 0:
-                    self.assertNotNone(re.search(regex, data))
+                    self.assertNotNone(re.search(regex, data), "Regex not found: %s" % regex)
                 if len(contains) > 0:
-                    self.assertTrue(contains in data)
+                    self.assertTrue(contains in data, "Substring not found: %s" % contains)
         elif monitor.tag == 'filetest':
+            print "Checking File: %s" % (monitor.get('file'))
             regex = monitor.get('regex', '')
             contains = monitor.get('contains', '')
             minSize = monitor.get('minSize', '0')
@@ -125,25 +130,27 @@ def create_test(monitor):
             with open(monitor.get('file'), 'rb') as f:
                 if len(regex) > 0 or len(contains) > 0 or minSize > 0 or maxSize is not None:
                     data = f.read()
+                    print "Actual file size: %d bytes" % (len(data))
                     if len(regex) > 0:
-                        self.assertNotNone(re.search(regex, data))
+                        self.assertNotNone(re.search(regex, data) "Regex not found: %s" % regex)
                     if len(contains) > 0:
-                        self.assertTrue(contains in data)
+                        self.assertTrue(contains in data, "Substring not found: %s" % contains)
                     if minSize > 0:
-                        self.assertLessEqual(minSize, len(data))
+                        self.assertLessEqual(minSize, len(data), "File is smaller than %d bytes" % minSize)
                     if maxSize is not None:
-                        self.assertGreaterEqual(maxSize, len(data))
+                        self.assertGreaterEqual(maxSize, len(data), "File is larger than %d bytes" % maxSize)
             age = time.time() - os.path.getmtime(monitor.get('file'))
+            print "Actual file age: %d seconds (%d days)" % (age, age / 86400)
             minAge = monitor.get('minAge', None)
             if minAge is not None:
-                self.assertLessEqual(minAge, age)
+                self.assertLessEqual(minAge, age, "File is younger than %d seconds" % minAge)
             maxAge = monitor.get('maxAge', None)
             if maxAge is not None:
-                self.assertGreaterEqual(maxAge, age)
+                self.assertGreaterEqual(maxAge, age, "File is older than %d seconds" % maxAge)
         elif monitor.tag == 'nofiletest':
             try:
                 open(monitor.get('file'), 'rb')
-                self.fail("IOError Expected")
+                self.fail("File exists and should not")
             except IOError:
                 pass
         elif monitor.tag == 'disktest':
@@ -153,11 +160,12 @@ def create_test(monitor):
             else:
                 statvfs = os.statvfs(monitor.get('disk'))
                 freebytes = statvfs.f_bsize * statvfs.f_bavail
+            print "Actual free space: %d bytes (%d MB)" % (freebytes, freebytes / 1048576)
             minSize = monitor.get('minBytes', '0')
             maxSize = monitor.get('maxBytes', None)
-            self.assertLessEqual(minSize, freebytes)
+            self.assertLessEqual(minSize, freebytes, "Disk has less than %d bytes available" % minSize)
             if maxSize is not None:
-                self.assertGreaterEqual(maxSize, freebytes)
+                self.assertGreaterEqual(maxSize, freebytes, "Disk has more than %d bytes available" % maxSize)
         else:
             self.fail("Unknown monitor type: " + monitor.tag)
     return method
