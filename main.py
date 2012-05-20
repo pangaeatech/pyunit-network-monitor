@@ -76,7 +76,9 @@ def create_tests(config_file):
 
     if testnum <= 0:
         tests['test_no_tests'] = create_test(None)
-        
+
+    tests['__name__'] = 'pyunit_network_monitor'
+
     return type('testclass', (unittest.TestCase, object), tests)
 
 def create_test(monitor):
