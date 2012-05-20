@@ -75,6 +75,14 @@ ftp).
                 </xsd:documentation>
             </xsd:annotation>
         </xsd:attribute>
+        <xsd:attribute name="contains" type="xsd:string" use="optional">
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en">
+If specified, then this string must be found <i>anywhere</i> within the data returned
+from the URL in order for the URL to be considered valid.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
         <xsd:attribute name="regex" type="xsd:string" use="optional">
             <xsd:annotation>
                 <xsd:documentation xml:lang="en">
@@ -184,6 +192,14 @@ contents of the file against a regular expression.
             <xsd:annotation>
                 <xsd:documentation xml:lang="en">
 The full path of the file (OS-dependent format).
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="contains" type="xsd:string" use="optional">
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en">
+If specified, then this string must be found <i>anywhere</i> within the file in
+order for the file to be considered valid.
                 </xsd:documentation>
             </xsd:annotation>
         </xsd:attribute>

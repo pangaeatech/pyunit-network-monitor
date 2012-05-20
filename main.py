@@ -110,17 +110,25 @@ def create_test(monitor):
                 request.add_header("Authorization", "Basic %s" % auth)
             req = urllib2.urlopen(request)
             regex = monitor.get('regex', '')
-            if len(regex) > 0:
-                self.assertNotNone(re.search(regex, req.read()))
+            contains = monitor.get('contains', '')
+            if len(regex) > 0 or len(contains) > 0:
+                data = req.read()
+                if len(regex) > 0:
+                    self.assertNotNone(re.search(regex, data))
+                if len(contains) > 0:
+                    self.assertTrue(contains in data)
         elif monitor.tag == 'filetest':
             regex = monitor.get('regex', '')
+            contains = monitor.get('contains', '')
             minSize = monitor.get('minSize', '0')
             maxSize = monitor.get('maxSize', None)
             with open(monitor.get('file'), 'rb') as f:
-                if len(regex) > 0 or minSize > 0 or maxSize is not None:
+                if len(regex) > 0 or len(contains) > 0 or minSize > 0 or maxSize is not None:
                     data = f.read()
                     if len(regex) > 0:
                         self.assertNotNone(re.search(regex, data))
+                    if len(contains) > 0:
+                        self.assertTrue(contains in data)
                     if minSize > 0:
                         self.assertLessEqual(minSize, len(data))
                     if maxSize is not None:

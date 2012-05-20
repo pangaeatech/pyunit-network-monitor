@@ -25,14 +25,15 @@ your monitor results over time as well.
 
 Currently, this tool supports the following types of monitors:
 * **urltest:** Test that a URL is valid and accessible.  Optionally, check the
-  contents of the returned data against a regular expression.  Supports various
-  protocols (http, https, ftp, etc.) and supports basic HTTP authentication.
+  contents of the returned data against a substring and/or regular expression. 
+  Supports various protocols (http, https, ftp, etc.) and supports basic HTTP
+  authentication.
 * **tcptest:** Test that a TCP port is open on a particular host
 * **udptest:** Test that a UDP port is open on a particular host
 * **filetest:** Test for the existence of a file in the filesystem.
-  Optionally, check the contents of the file against a regular expression.
-  Additionally, you can assert a minimum and maximum byte size on the file
-  and/or a minimum and maximum modification time for the file.
+  Optionally, check the contents of the file against a substring and/or regular 
+  expression.  Additionally, you can assert a minimum and maximum byte size 
+  on the file and/or a minimum and maximum modification time for the file.
 * **nofiletest:** Test for the *non*-existence of a file in the filesystem.
 * **disktest:** Test the amount of free space on a disk/partition.
 
