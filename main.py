@@ -125,10 +125,10 @@ def create_test(monitor):
             print "Checking File: %s" % (monitor.get('file'))
             regex = monitor.get('regex', '')
             contains = monitor.get('contains', '')
-            minSize = monitor.get('minSize', '0')
-            maxSize = monitor.get('maxSize', None)
+            minSize = int(monitor.get('minSize', '0'))
+            maxSize = int(monitor.get('maxSize', '-1'))
             with open(monitor.get('file'), 'rb') as f:
-                if len(regex) > 0 or len(contains) > 0 or minSize > 0 or maxSize is not None:
+                if len(regex) > 0 or len(contains) > 0 or minSize > 0 or maxSize >= 0:
                     data = f.read()
                     print "Actual file size: %d bytes" % (len(data))
                     if len(regex) > 0:
@@ -136,17 +136,17 @@ def create_test(monitor):
                     if len(contains) > 0:
                         self.failUnless(contains in data, "Substring not found: %s" % contains)
                     if minSize > 0:
-                        self.failIf(minSize > len(data), "File is smaller than %s bytes" % minSize)
-                    if maxSize is not None:
-                        self.failIf(maxSize < len(data), "File is larger than %s bytes" % maxSize)
+                        self.failIf(minSize > len(data), "File is smaller than %d bytes" % minSize)
+                    if maxSize >= 0:
+                        self.failIf(maxSize < len(data), "File is larger than %d bytes" % maxSize)
             age = time.time() - os.path.getmtime(monitor.get('file'))
             print "Actual file age: %d seconds (%d days)" % (age, age / 86400)
-            minAge = monitor.get('minAge', None)
-            if minAge is not None:
-                self.failIf(minAge > age, "File is younger than %s seconds" % minAge)
-            maxAge = monitor.get('maxAge', None)
-            if maxAge is not None:
-                self.failIf(maxAge < age, "File is older than %s seconds" % maxAge)
+            minAge = int(monitor.get('minAge', '-1'))
+            if minAge >= 0:
+                self.failIf(minAge > age, "File is younger than %d seconds" % minAge)
+            maxAge = int(monitor.get('maxAge', '-1'))
+            if maxAge >= 0:
+                self.failIf(maxAge < age, "File is older than %d seconds" % maxAge)
         elif monitor.tag == 'nofiletest':
             try:
                 open(monitor.get('file'), 'rb')
@@ -161,11 +161,11 @@ def create_test(monitor):
                 statvfs = os.statvfs(monitor.get('disk'))
                 freebytes = statvfs.f_bsize * statvfs.f_bavail
             print "Actual free space: %d bytes (%d MB)" % (freebytes, freebytes / 1048576)
-            minSize = monitor.get('minBytes', '0')
-            maxSize = monitor.get('maxBytes', None)
-            self.failIf(minSize > freebytes, "Disk has less than %s bytes available" % minSize)
-            if maxSize is not None:
-                self.failIf(maxSize < freebytes, "Disk has more than %s bytes available" % maxSize)
+            minSize = int(monitor.get('minBytes', '0'))
+            maxSize = int(monitor.get('maxBytes', '-1'))
+            self.failIf(minSize > freebytes, "Disk has less than %d bytes available" % minSize)
+            if maxSize >= 0:
+                self.failIf(maxSize < freebytes, "Disk has more than %d bytes available" % maxSize)
         else:
             self.fail("Unknown monitor type: " + monitor.tag)
     return method
