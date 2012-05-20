@@ -33,7 +33,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
 THE POSSIBILITY OF SUCH DAMAGE.
 """
 
-import re, sys, os, argparse, socket, urllib2
+import re, sys, os, argparse, socket, urllib2, time
 from xml.etree import ElementTree
 from lib import unittest, xmlrunner
 
@@ -125,6 +125,13 @@ def create_test(monitor):
                         self.assertLessEqual(minSize, len(data))
                     if maxSize is not None:
                         self.assertGreaterEqual(maxSize, len(data))
+            age = time.time() - os.path.getmtime(monitor.get('file'))
+            minAge = monitor.get('minAge', None)
+            if minAge is not None:
+                self.assertLessEqual(minAge, age)
+            maxAge = monitor.get('maxAge', None)
+            if maxAge is not None:
+                self.assertGreaterEqual(maxAge, age)
         elif monitor.tag == 'nofiletest':
             try:
                 open(monitor.get('file'), 'rb')

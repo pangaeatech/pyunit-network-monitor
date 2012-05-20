@@ -211,6 +211,22 @@ be considered valid.
                 </xsd:documentation>
             </xsd:annotation>
         </xsd:attribute>
+        <xsd:attribute name="minAge" type="xsd:nonNegativeInteger" default="0">
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en">
+If specified, then the file must have been last modified at <i>least</i> this 
+many <i>seconds</i> ago to be considered valid.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="maxAge" type="xsd:nonNegativeInteger" use="optional">
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en">
+If specified, then the file must have been last modified at <i>most</i> this 
+many <i>seconds</i> ago to be considered valid.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
         <xsd:attribute name="name" type="xsd:string" use="optional">
             <xsd:annotation>
                 <xsd:documentation xml:lang="en">

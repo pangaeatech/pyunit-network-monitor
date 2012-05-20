@@ -31,7 +31,8 @@ Currently, this tool supports the following types of monitors:
 * **udptest:** Test that a UDP port is open on a particular host
 * **filetest:** Test for the existence of a file in the filesystem.
   Optionally, check the contents of the file against a regular expression.
-  Additionally, you can assert a minimum and maximum byte size on the file.
+  Additionally, you can assert a minimum and maximum byte size on the file
+  and/or a minimum and maximum modification time for the file.
 * **nofiletest:** Test for the *non*-existence of a file in the filesystem.
 * **disktest:** Test the amount of free space on a disk/partition.
 
