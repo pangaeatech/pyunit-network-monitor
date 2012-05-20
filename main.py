@@ -33,7 +33,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
 THE POSSIBILITY OF SUCH DAMAGE.
 """
 
-import re, sys, argparse, socket, urllib2
+import re, sys, os, argparse, socket, urllib2
 from xml.etree import ElementTree
 from lib import unittest, xmlrunner
 
@@ -49,8 +49,8 @@ def _parse_commandline():
     parser = argparse.ArgumentParser(version="%(prog)s v" + __version__,
         description="PyUnit-based Port/Host Monitor")
 
-    parser.add_argument("--xml-out", action="store", default=None,
-                        dest="outfile", help="If specified, then output results as XML to this file.  Otherwise, outputs results as TEXT to stdout")
+    parser.add_argument("--xml-dir", action="store", default=None,
+                        dest="outdir", help="If specified, then output results as XML in this directory.  Otherwise, outputs results as TEXT to stdout")
     parser.add_argument("--config", action="store", default='config.xml',
                         dest="config", help="Use the specified file instead of config.xml")
 
@@ -154,9 +154,10 @@ def main(options):
     testclass = create_tests(options.config)
     suite = unittest.TestSuite()
     suite.addTest(unittest.TestLoader().loadTestsFromTestCase(testclass))
-    if options.outfile is not None:
+    if options.outdir is not None:
+        os.mkdirs(options.outdir)
         runner = xmlrunner.XMLTestRunner()
-        runner._path = options.outfile
+        runner._path = options.outdir
     else:
         runner = unittest.TextTestRunner(verbosity=2)
     results = runner.run(suite)
