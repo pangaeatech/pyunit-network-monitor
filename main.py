@@ -33,7 +33,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
 THE POSSIBILITY OF SUCH DAMAGE.
 """
 
-import re, sys, os, argparse, socket, urllib2, time
+import re, sys, os, argparse, socket, urllib2, time, base64
 from xml.etree import ElementTree
 from lib import unittest, xmlrunner
 
@@ -95,12 +95,12 @@ def create_test(monitor):
         elif monitor.tag == 'tcptest':
             print "Checking TCP Connection to %s:%s" % (monitor.get('host'), monitor.get('port'))
             s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            s.connect((monitor.get('host'), monitor.get('port')))
+            s.connect((monitor.get('host'), int(monitor.get('port'))))
             s.shutdown(2)
         elif monitor.tag == 'udptest':
             print "Checking UCP Connection to %s:%s" % (monitor.get('host'), monitor.get('port'))
             s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            s.connect((monitor.get('host'), monitor.get('port')))
+            s.connect((monitor.get('host'), int(monitor.get('port'))))
             s.shutdown(2)
         elif monitor.tag == 'urltest':
             print "Checking URL: %s" % (monitor.get('url'))
@@ -132,7 +132,7 @@ def create_test(monitor):
                     data = f.read()
                     print "Actual file size: %d bytes" % (len(data))
                     if len(regex) > 0:
-                        self.assertNotNone(re.search(regex, data) "Regex not found: %s" % regex)
+                        self.assertNotNone(re.search(regex, data), "Regex not found: %s" % regex)
                     if len(contains) > 0:
                         self.assertTrue(contains in data, "Substring not found: %s" % contains)
                     if minSize > 0:
