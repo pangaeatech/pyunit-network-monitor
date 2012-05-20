@@ -136,17 +136,17 @@ def create_test(monitor):
                     if len(contains) > 0:
                         self.failUnless(contains in data, "Substring not found: %s" % contains)
                     if minSize > 0:
-                        self.failIf(minSize > len(data), "File is smaller than %d bytes" % minSize)
+                        self.failIf(minSize > len(data), "File is smaller than %s bytes" % minSize)
                     if maxSize is not None:
-                        self.failIf(maxSize < len(data), "File is larger than %d bytes" % maxSize)
+                        self.failIf(maxSize < len(data), "File is larger than %s bytes" % maxSize)
             age = time.time() - os.path.getmtime(monitor.get('file'))
             print "Actual file age: %d seconds (%d days)" % (age, age / 86400)
             minAge = monitor.get('minAge', None)
             if minAge is not None:
-                self.failIf(minAge > age, "File is younger than %d seconds" % minAge)
+                self.failIf(minAge > age, "File is younger than %s seconds" % minAge)
             maxAge = monitor.get('maxAge', None)
             if maxAge is not None:
-                self.failIf(maxAge < age, "File is older than %d seconds" % maxAge)
+                self.failIf(maxAge < age, "File is older than %s seconds" % maxAge)
         elif monitor.tag == 'nofiletest':
             try:
                 open(monitor.get('file'), 'rb')
@@ -163,9 +163,9 @@ def create_test(monitor):
             print "Actual free space: %d bytes (%d MB)" % (freebytes, freebytes / 1048576)
             minSize = monitor.get('minBytes', '0')
             maxSize = monitor.get('maxBytes', None)
-            self.failIf(minSize > freebytes, "Disk has less than %d bytes available" % minSize)
+            self.failIf(minSize > freebytes, "Disk has less than %s bytes available" % minSize)
             if maxSize is not None:
-                self.failIf(maxSize < freebytes, "Disk has more than %d bytes available" % maxSize)
+                self.failIf(maxSize < freebytes, "Disk has more than %s bytes available" % maxSize)
         else:
             self.fail("Unknown monitor type: " + monitor.tag)
     return method
