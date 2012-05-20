@@ -66,7 +66,7 @@ def create_tests(config_file):
     @rtype: unittest.TestCase
     @return: a subclass of unittest.TestCase containing the tests to run
     """
-    tests = {'id': lambda (self) : 'main.testclass'}
+    tests = {'__class__': 'testclass'}
 
     testnum = 0
     for monitor in ElementTree.parse(config_file).getroot():
