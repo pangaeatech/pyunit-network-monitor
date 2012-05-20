@@ -110,7 +110,7 @@ def create_tests(config_file):
     testnum = 0
     for monitor in ElementTree.parse(config_file).getroot():
         name = re.sub('[^A-Za-z0-9]+', '_', monitor.get('name', monitor.tag)).strip('_')
-        tests["test_%d_%s" % (testnum, name)] = create_test(monitor)
+        tests["test_%03d_%s" % (testnum, name)] = create_test(monitor)
         testnum += 1
 
     if testnum <= 0:
