@@ -66,7 +66,7 @@ def create_tests(config_file):
     @rtype: unittest.TestCase
     @return: a subclass of unittest.TestCase containing the tests to run
     """
-    tests = {}
+    tests = {'id': lambda (self) : 'main.testclass'}
 
     testnum = 0
     for monitor in ElementTree.parse(config_file).getroot():
@@ -76,8 +76,6 @@ def create_tests(config_file):
 
     if testnum <= 0:
         tests['test_no_tests'] = create_test(None)
-
-    tests['__name__'] = 'pyunit_network_monitor'
 
     return type('testclass', (unittest.TestCase, object), tests)
 
