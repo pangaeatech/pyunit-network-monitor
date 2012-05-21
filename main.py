@@ -206,7 +206,7 @@ def main(options):
     if options.outdir is not None:
         if not os.path.isdir(options.outdir):
             os.makedirs(options.outdir)
-        runner = xmlrunner.XMLTestRunner()
+        runner = xmlrunner.XMLTestRunner(verbosity=2)
         runner._path = options.outdir
     else:
         runner = unittest.TextTestRunner(verbosity=2)

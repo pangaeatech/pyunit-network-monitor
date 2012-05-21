@@ -56,7 +56,7 @@ class _TestInfo(object):
         info._error = error
         return info
 
-    def print_report(self, stream):
+    def print_report(self, stream, verbosity=0):
         """Print information about this test case in XML format to the
         supplied stream.
 
@@ -72,6 +72,21 @@ class _TestInfo(object):
         if self._error is not None:
             self._print_error(stream, 'error', self._error)
         stream.write('</testcase>\n')
+
+        if verbosity == 1:
+            if self._failure is not None:
+                sys.stderr.write('F')
+            elif self._error is not None:
+                sys.stderr.write('E')
+            else:
+                sys.stderr.write('.')
+        elif verbosity > 1:
+            if self._failure is not None:
+                sys.stderr.write(' *  %s ... FAIL\n' % self._method[9:])
+            elif self._error is not None:
+                sys.stderr.write(' *  %s ... ERROR\n' % self._method[9:])
+            else:
+                sys.stderr.write(' *  %s ... ok\n' % self._method[9:])
 
     def _print_error(self, stream, tagname, error):
         """Print information from a failure or error to the supplied stream."""
@@ -131,13 +146,14 @@ class _XMLTestResult(unittest.TestResult):
         unittest.TestResult.addFailure(self, test, err)
         self._failure = err
 
-    def print_report(self, stream, time_taken, out, err):
+    def print_report(self, stream, time_taken, out, err, verbosity=0):
         """Prints the XML report to the supplied stream.
         
         The time the tests took to perform as well as the captured standard
         output and standard error streams must be passed in.a
 
         """
+        sys.stderr.write("Starting Unit Tests:\n")
         stream.write('<testsuite errors="%(e)d" failures="%(f)d" ' % \
             { "e": len(self.errors), "f": len(self.failures) })
         stream.write('name="%(n)s" tests="%(t)d" time="%(time).3f">\n' % \
@@ -147,10 +163,11 @@ class _XMLTestResult(unittest.TestResult):
                 "time": time_taken,
             })
         for info in self._tests:
-            info.print_report(stream)
+            info.print_report(stream, verbosity)
         stream.write('  <system-out><![CDATA[%s]]></system-out>\n' % out)
         stream.write('  <system-err><![CDATA[%s]]></system-err>\n' % err)
         stream.write('</testsuite>\n')
+        sys.stderr.write("\nAll Tests Completed in %.3f seconds\n" % time_taken)
 
 
 class XMLTestRunner(object):
@@ -166,9 +183,10 @@ class XMLTestRunner(object):
 
     """
 
-    def __init__(self, stream=None):
+    def __init__(self, stream=None, verbosity=0):
         self._stream = stream
         self._path = "."
+        self._verbosity = verbosity
 
     def run(self, test):
         """Run the given test case or test suite."""
@@ -196,9 +214,11 @@ class XMLTestRunner(object):
                 err_s = ""
 
         time_taken = time.time() - start_time
-        result.print_report(stream, time_taken, out_s, err_s)
+        result.print_report(stream, time_taken, out_s, err_s, self._verbosity)
         if self._stream is None:
             stream.close()
+        if self._verbosity > 0:
+            sys.stderr.write("\n")
 
         return result
 
