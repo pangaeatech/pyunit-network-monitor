@@ -153,7 +153,7 @@ class _XMLTestResult(unittest.TestResult):
         output and standard error streams must be passed in.a
 
         """
-        sys.stderr.write("Starting Unit Tests:\n")
+        sys.stderr.write("Starting Network Monitors:\n")
         stream.write('<testsuite errors="%(e)d" failures="%(f)d" ' % \
             { "e": len(self.errors), "f": len(self.failures) })
         stream.write('name="%(n)s" tests="%(t)d" time="%(time).3f">\n' % \
@@ -167,7 +167,7 @@ class _XMLTestResult(unittest.TestResult):
         stream.write('  <system-out><![CDATA[%s]]></system-out>\n' % out)
         stream.write('  <system-err><![CDATA[%s]]></system-err>\n' % err)
         stream.write('</testsuite>\n')
-        sys.stderr.write("\nAll Tests Completed in %.3f seconds\n" % time_taken)
+        sys.stderr.write("\nAll Monitors Completed in %.3f seconds\n" % time_taken)
 
 
 class XMLTestRunner(object):
