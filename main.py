@@ -145,7 +145,7 @@ def create_test(monitor):
             s.shutdown(socket.SHUT_RDWR)
 
         elif monitor.tag == 'urltest':
-            print "Checking URL: %s" % (monitor.get('url'))
+            print "Checking URL (timeout = %s seconds): %s" % (monitor.get('timeout', 5), monitor.get('url'))
             request = urllib2.Request(monitor.get('url'))
             username = monitor.get('username', '')
             password = monitor.get('password', '')
