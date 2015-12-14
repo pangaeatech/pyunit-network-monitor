@@ -152,7 +152,7 @@ def create_test(monitor):
             if len(username) > 0 and len(password) > 0:
                 auth = base64.encodestring('%s:%s' % (username, password)).replace('\n', '')
                 request.add_header("Authorization", "Basic %s" % auth)
-            req = urllib2.urlopen(request, timeout=monitor.get('timeout', 15))
+            req = urllib2.urlopen(request, timeout=int(monitor.get('timeout', 15)))
 
             regex = monitor.get('regex', '')
             contains = monitor.get('contains', '')
