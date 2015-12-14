@@ -112,6 +112,13 @@ An optional name for the test
                 </xsd:documentation>
             </xsd:annotation>
         </xsd:attribute>
+        <xsd:attribute name="timeout" type="xsd:integer" use="optional">
+            <xsd:annotation>
+                <xsd:documentation xml:lang="en">
+The timeout (in seconds) to use when connecting to the server (defaults to 5 if not specified).
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
     </xsd:complexType>
 </xsd:element>
 
