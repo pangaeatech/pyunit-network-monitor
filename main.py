@@ -145,14 +145,14 @@ def create_test(monitor):
             s.shutdown(socket.SHUT_RDWR)
 
         elif monitor.tag == 'urltest':
-            print "Checking URL (timeout = %s seconds): %s" % (monitor.get('timeout', 5), monitor.get('url'))
+            print "Checking URL (timeout = %s seconds): %s" % (monitor.get('timeout', 15), monitor.get('url'))
             request = urllib2.Request(monitor.get('url'))
             username = monitor.get('username', '')
             password = monitor.get('password', '')
             if len(username) > 0 and len(password) > 0:
                 auth = base64.encodestring('%s:%s' % (username, password)).replace('\n', '')
                 request.add_header("Authorization", "Basic %s" % auth)
-            req = urllib2.urlopen(request, timeout=monitor.get('timeout', 5))
+            req = urllib2.urlopen(request, timeout=monitor.get('timeout', 15))
 
             regex = monitor.get('regex', '')
             contains = monitor.get('contains', '')
