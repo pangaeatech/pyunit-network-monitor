@@ -1,5 +1,5 @@
 # -.- coding: utf-8 -.-
-# -.- dependencies: Python 2.5+ -.-
+# -.- dependencies: Python 2.7.9+ -.-
 
 """
 PyUnit-based Port/Host Monitor
@@ -33,7 +33,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
 THE POSSIBILITY OF SUCH DAMAGE.
 """
 
-import re, sys, os, argparse, socket, urllib2, time, base64
+import re, sys, os, argparse, socket, urllib2, time, base64, ssl
 from xml.etree import ElementTree
 from lib import unittest, xmlrunner
 
@@ -152,7 +152,11 @@ def create_test(monitor):
             if len(username) > 0 and len(password) > 0:
                 auth = base64.encodestring('%s:%s' % (username, password)).replace('\n', '')
                 request.add_header("Authorization", "Basic %s" % auth)
-            req = urllib2.urlopen(request, timeout=int(monitor.get('timeout', 15)))
+
+            ctx = ssl.create_default_context()
+            ctx.check_hostname = False
+            ctx.verify_mode = ssl.CERT_NONE
+            req = urllib2.urlopen(request, timeout=int(monitor.get('timeout', 15)), context=ctx)
 
             regex = monitor.get('regex', '')
             contains = monitor.get('contains', '')
